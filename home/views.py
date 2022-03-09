@@ -11,14 +11,15 @@ from account.models import Relation
 
 class HomeView(LoginRequiredMixin, View):
     def get(self, request):
-        relation = Relation.objects.filter(from_user=request.user)
-        users = []
-        for rel in relation:
-            users.append(rel.to_user)
+      
+        followed_users = Relation.objects.filter(from_user=request.user).values('to_user')
+        posts = Post.objects.filter(user__in=followed_users).order_by('-created')
         context = {
-            'users': users
+            'posts': posts,
         }
+        
         return render(request, 'home/index.html', context)
+       
 
 
 class PostCreateView(LoginRequiredMixin, View):
