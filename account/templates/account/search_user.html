@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+Search
+{% endblock %}
+
+{% block content %}
+
+<div class="row mt-5">
+    <div class="col-md-4"></div>
+    <div class="col-md-4 ">
+        {% if users  %}
+            <div class="card-header bg-primary text-center text-light">Followings List</div>
+            <div class="followerlist pt-3 px-3">
+                {% for user in users %}
+                {% if user.profile.avatar %}
+                <img src="{{ user.profile.avatar.url }}" class="img-thumbnail img-fluid rounded-circle mb-3 ml-3"
+                    style="width: 50px; height: 50px;">
+                {% else %}
+                <img src="{% static 'img/Avatar.png' %}" class="img-thumbnail img-fluid rounded-circle mb-3 ml-3"
+                    style="width: 50px; height: 50px;">
+                {% endif %}
+                <a href="{% url 'account:user_profile' user.id %}" class="card-link"><strong
+                        class="text-center text-dark mb-4">{{ user.username }}</strong></a>
+                <hr>
+            
+                {% endfor %}
+        {% else %}  
+             <p class="alert alert-danger">Not Found this username</p>
+        {% endif %}     
+        </div>
+    </div>
+    <div class="col-md-4"></div>
+</div>
+
+{% endblock %}

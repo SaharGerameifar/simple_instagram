@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    {{ user.username }}
+{% endblock %}
+
+{% block content %}
+    <div class="mt-5">
+        {% if user.profile.avatar %}
+            <img src="{{ user.profile.avatar.url }}" class="img-thumbnail img-fluid rounded-circle d-block mx-auto mb-3" style="width: 110px; height: 110px;">
+        {% else %}
+            <img src="{% static 'img/Avatar.png' %}" class="img-thumbnail img-fluid rounded-circle d-block mx-auto mb-3" style="width: 110px; height: 110px;">
+        {% endif %}
+        <h3 class="text-center text-dark mb-4">{{ user.username }}</h3>
+        
+            <div class="row d-flex justify-content-center">
+                {% if user.get_full_name %}
+                <p class="text-center text-dark mb-4 d-inline">{{ user.get_full_name }} - </p>
+                {% endif %}
+                {% if user.profile.bio %}
+                <p class="text-center text-dark mb-4 d-inline">{{ user.profile.bio }}</p>
+                {% endif %}
+            </div>
+        
+        
+        <div class="row d-flex justify-content-center mb-3 mx-auto">
+            <div class="col-4 text-center">Followers</div>
+            <div class="col-4 text-center">Following</div>
+            <div class="col-4 text-center">Posts</div>
+            <div class="col-4 text-center"><a href="{% url 'account:user_followers' user.id %}" class="">{{ followers }} </a></div>
+            <div class="col-4 text-center"><a href="{% url 'account:user_followings' user.id %}" class="">{{ following }} </a></div>
+            <div class="col-4 text-center"><a href="" class=""> {{ count_post }} </a></div>
+        </div> 
+        <div class="row d-flex justify-content-center">
+            {% if request.user.id == user.id %}
+                <a href="{% url 'home:post_create' %}" class="btn btn-primary px-5 mx-2">Create Post</a>
+                <a href="{% url 'account:edit_user_profile' %}" class="btn btn-outline-primary px-5 mx-2">Edit Profile</a>
+            {% endif %}
+        </div>
+           
+        <div class="row d-flex justify-content-center">
+            {% if request.user.id != user.id and not is_following %}
+                <a class="btn btn-primary px-5" href="{% url 'account:user_follow' user.id %}">Follow</a>
+            {% elif request.user.id != user.id and is_following %}
+                <a class="btn btn-primary px-5" href="{% url 'account:user_unfollow' user.id %}">Unfollow</a>
+            {% endif %}
+        </div>
+
+    </div>
+    <div class="row mt-5">
+        
+            {% for post in posts %}
+                <div class="col-8 col-md-6 col-lg-4 mb-3 offset-2 offset-md-0">
+                    <div class="card">
+                        <a href="{% url 'home:post_detail' post.id post.slug %}" target="_blank" rel="noopener noreferrer" class="card-link">
+                            <img src="{{ post.image.url }}" class="card-img card-img-top img-fluid" style="height: 300px;" />
+                            <div class="card-body">
+                                <p class="card-text"> {{ post.caption|truncatewords:5 }}</p>
+                            </div>
+                        </a>
+                        {% if request.user.id == user.id %}
+                            <div class="card-footer">
+                                <a href="{% url 'home:post_delete' post.id %}"><i class="fa fa-trash px-2"></i></a>
+                                <a href="{% url 'home:post_update' post.id %}"><i class="fa fa-edit px-2"></i></a>
+                            </div>
+                        {% endif %}    
+                    </div>
+                </div>
+            {%empty %}
+                <p class="text-center text-dark mt-4 mx-auto"> Haven't any post yet</p>
+            {% endfor %}
+          
+    </div>
+
+{% endblock %}
+

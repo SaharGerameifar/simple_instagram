@@ -1,0 +1,4 @@
+    <form action="{% url 'account:user_search' %}" method="get" class="d-flex"> 
+        <input type="text" class="form-control search_field" placeholder="Search username" value="{{ request.GET.search }}" name="search"/>
+        <button type="submit" class="search"><i class="fa fa-search"></i></button>
+    </form>

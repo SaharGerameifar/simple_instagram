@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block title %}
+   {{ post.user.username }}
+{% endblock %}
+
+{% block content %}
+    <div class="row m-5">
+        <div class="col-md-2"></div>
+            <div class="col-md-8">
+                <div class="card">
+                    <img src="{{ post.image.url }}" class="img-fluid card-img-top" style="height: 450px;">
+                    <div class="card-body">
+                        {% if post.user.profile.avatar %}
+                            <img src="{{ post.user.profile.avatar.url }}" class="img-thumbnail img-fluid rounded-circle mb-3" style="width: 70px; height: 70px;">
+                        {% else %}
+                            <img src="{% static 'img/Avatar.png' %}" class="img-thumbnail img-fluid rounded-circle d-block mb-3" style="width: 70px; height: 70px;">
+                        {% endif %}
+                        <a href="{% url 'account:user_profile' post.user.id %}" class="card-link"><strong class="text-center text-dark mb-4">{{ post.user.username }}</strong></a>
+                        <small class="d-block py-2">{{ post.updated|date:"Y-M" }}</small>
+                        <p class="card-text">{{ post.caption }}</p>
+                    </div>
+                    <div class="card-footer">
+                        {% if request.user.is_authenticated %}
+                            <a href="{% url 'home:post_like' post.id %}" >
+                                 <i class="{% if can_like %} fa fa-heart {% else %} fa fa-heart-o {% endif %}"> </i>
+                            </a>
+                            <br>
+                            <form method="POST" novalidate id="createcomment" >
+                                <h3 class="text-center text-dark mb-4">Create Comment</h3>
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    {{ form.body|attr:"placeholder:Write Comment ..."|add_class:'form-control' }}
+                                    {% for error in form.body.errors %}
+                                        <p class="alert alert-danger">{{ error }}</p>
+                                    {% endfor %}
+                                </div>
+                                                
+                                {% if form.non_field_errors %}
+                                    <div class="alert alert-danger">
+                                        {% for error in form.non_field_errors %}
+                                            <span>{{ error }}</span>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                                <input type="submit" value="Send" class="btn btn-primary btn-block">
+                            </form>
+                            <br>
+                        {% else %}
+                            <p class="alert alert-danger">Only logged in users can comment.</p>
+                        {% endif %}
+                        <strong class="d-block text-dark mb-1">comments : {{ post.comments_count }}</strong>
+                        <a id="btncreatecomment" >Create Comment</a>
+                        <hr>
+                        {% for comment in comments %}
+                            {% if comment.user.profile.avatar %}
+                                <img src="{{ comment.user.profile.avatar.url }}" class="img-thumbnail img-fluid rounded-circle mb-1" style="width: 40px; height: 40px;">
+                            {% else %}
+                                <img src="{% static 'img/Avatar.png' %}" class="img-thumbnail img-fluid rounded-circle d-block mb-1" style="width: 40px; height: 40px;">
+                            {% endif %}
+                            <a href="{% url 'account:user_profile' comment.user.id %}" class="card-link"><strong class="text-center text-dark mb-4">{{ comment.user.username }}</strong></a>
+                            <small class="d-block py-2">{{ comment.created|timesince }}</small>
+                            <p class="card-text pl-1 comment-body">{{ comment.body }}</p>
+                            {% if request.user.is_authenticated %}
+                                <a class="btnreplycomment">reply</a>
+                                <form action="{% url 'home:create_reply_comment' post.id comment.id %}" method="post" novalidate class="replycomment">
+                                    <h3 class="text-center text-dark mb-4">Reply Comment</h3>
+                                    {% csrf_token %}
+                                    <div class="form-group">
+                                        {{ form_reply.body|attr:"placeholder:Write Comment ..."|add_class:'form-control' }}
+                                        {% for error in form_reply.body.errors %}
+                                            <p class="alert alert-danger">{{ error }}</p>
+                                        {% endfor %}
+                                    </div>
+                                                    
+                                    {% if form_reply.non_field_errors %}
+                                        <div class="alert alert-danger">
+                                            {% for error in form_reply.non_field_errors %}
+                                                <span>{{ error }}</span>
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                    <input type="submit" value="Reply" class="btn btn-primary btn-block">
+                                </form>
+                            {% endif %}
+                            {% with replies=comment.replycomments.all %}
+                                <div class="ml-5">
+                                    {% for reply in replies %}
+                                        {% if reply.user.profile.avatar %}
+                                            <img src="{{ reply.user.profile.avatar.url }}" class="img-thumbnail img-fluid rounded-circle my-1" style="width: 30px; height: 30px;">
+                                        {% else %}
+                                            <img src="{% static 'img/Avatar.png' %}" class="img-thumbnail img-fluid rounded-circle d-block my-1" style="width: 30px; height: 30px;">
+                                        {% endif %}
+                                        <a href="{% url 'account:user_profile' reply.user.id %}" class="card-link"><strong class="text-center replycommentusername text-dark mb-4">{{ reply.user.username }}</strong></a>
+                                        <small class="d-block py-2">{{ reply.created|timesince }}</small>
+                                        <p class="card-text pl-2 comment-body">{{ reply.body }}</p>
+                                    {% endfor %} 
+                                </div>   
+                            {% endwith %}
+                            
+                            <hr>
+                       {% empty %}
+                            <p>No comments yet!</p>
+                        {% endfor %}
+                    </div>    
+                </div>
+        <div class="col-md-2"></div>
+                
+    </div>
+    
+
+{% endblock %}

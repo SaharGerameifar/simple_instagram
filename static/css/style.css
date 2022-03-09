@@ -1,0 +1,120 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto:400,700');
+:root {
+    --mainBlue: #40ACF1;
+    --transparentBlue: rgba(64, 172, 241, 0.7);
+    --mainWhite: #FFFFFF;
+    --mainBlack: #292F36;
+    --mainGrey: rgb(216, 214, 214);
+    --mainYellow: #e3b505;
+}
+body{
+    margin: 0;
+    padding: 0;
+    font-family: 'Roboto', sans-serif;
+    color: var(--mainBlack);
+    background: var(--mainWhite);
+    max-width: 100%;
+    height: auto;
+    font-size: 0.95rem;
+}
+a {
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: none;
+}
+
+/* navbar style  */
+
+.navbar {
+    background: var(--mainWhite);
+}
+
+.navbar-icon {
+    font-size: 2rem;
+    color: var(--mainBlue);
+}
+
+.navbar-toggler {
+    outline-color: var(--mainBlue) !important;
+}
+
+.nav-link {
+    color: var(--mainBlack);
+}
+
+.nav-link:hover {
+    color: var(--mainBlue);
+}
+
+.nav-icon {
+    font-size: 1.5rem;
+    color: var(--mainBlue);
+    text-decoration: none !important;
+    transition-property: color;
+    text-rendering: 2s;
+    transition-timing-function: linear;
+}
+
+.nav-icon:hover {
+    color: var(--mainBlack);
+}
+
+/* register.html css  */
+
+
+.register_form form{
+    padding:50px 30px;
+    box-shadow: 0 5px 10px 0px rgb(0 0 0 / 10%);
+    -webkit-box-shadow: 0 5px 10px 0px rgb(0 0 0 / 10%);
+
+}
+.register_form form input::placeholder{
+    font-size: .7rem;
+}
+
+.comment-body{
+    font-size: 0.85rem;
+}
+small{
+    font-size: 70%;
+}
+.replycommentusername{
+    font-size: 80%;
+}
+#createcomment{
+    display: none;
+}
+.replycomment{
+    display: none;
+}
+#btncreatecomment{
+    border: none;
+    font-size: 80%;
+    border-bottom: 1px solid var(--mainBlue);
+    cursor: pointer;
+}
+.btnreplycomment{
+    border: none;
+    font-size: 70%;
+    border-bottom: 1px solid var(--mainBlue);
+    cursor: pointer;
+}
+.fa-heart, .fa-heart-o{
+    color:#dc3545;
+}
+.followerlist{
+    border: 1px solid var(--mainBlue);
+    border-top: none;
+
+}
+.search_field{
+    display: inline;
+}
+.search{
+    border: none;
+    background: none;
+    display: inline;
+    margin-left: -30px;
+}

@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block title %}
+    {{request.user.username}} Profile
+{% endblock %}
+
+{% block content %}
+    <div class="row mt-5">
+        <div class="col-md-4"></div>
+        <div class="col-md-4 register_form">
+            <form enctype="multipart/form-data" method="POST" novalidate>
+                <h3 class="text-center text-dark mb-4">Edit Profile</h3>
+                {% csrf_token %}
+                <div class="form-group">
+                    {% if request.user.profile.avatar %}
+                        <img src="{{ request.user.profile.avatar.url }}" class="img-thumbnail img-fluid rounded-circle d-block mx-auto mb-3" style="width: 110px; height: 110px;">
+                    {% else %}
+                        <img src="{% static 'img/Avatar.png' %}" class="img-thumbnail img-fluid rounded-circle d-block mx-auto mb-3" style="width: 110px; height: 110px;">
+                    {% endif %}
+                    {{ form.avatar|attr:"placeholder:Your Avatar ..."|add_class:'form-control' }}
+                    {% for error in form.avatar.errors %}
+                        <p class="alert alert-danger">{{ error }}</p>
+                    {% endfor %}
+                </div> 
+                <div class="form-group">
+                    {{ form.first_name|attr:"placeholder:Your First Name ..."|add_class:'form-control' }}
+                    {% for error in form.first_name.errors %}
+                        <p class="alert alert-danger">{{ error }}</p>
+                    {% endfor %}
+                </div>
+                <div class="form-group">
+                    {{ form.last_name|attr:"placeholder:Your Last Name ..."|add_class:'form-control' }}
+                    {% for error in form.last_name.errors %}
+                        <p class="alert alert-danger">{{ error }}</p>
+                    {% endfor %}
+                </div>
+                <div class="form-group">
+                    {{ form.email|attr:"placeholder:Your Email ..."|add_class:'form-control' }}
+                    {% for error in form.email.errors %}
+                        <p class="alert alert-danger">{{ error }}</p>
+                    {% endfor %}
+                </div>
+                <div class="form-group">
+                    {{ form.bio|attr:"placeholder:Your Bio ..."|add_class:'form-control' }}
+                    {% for error in form.bio.errors %}
+                        <p class="alert alert-danger">{{ error }}</p>
+                    {% endfor %}
+                </div>
+                
+                {% if form.non_field_errors %}
+                    <div class="alert alert-danger">
+                        {% for error in form.non_field_errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% endif %} 
+         
+                <input type="submit" value="Edit" class="btn btn-primary btn-block">
+            </form>
+        </div>
+        <div class="col-md-4"></div>
+    </div>
+
+{% endblock %}

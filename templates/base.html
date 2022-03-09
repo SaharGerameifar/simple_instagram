@@ -1,0 +1,39 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %}</title>
+
+    <!-- bootstarp style link  -->
+    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+
+    <!-- custom css link  -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+    <!-- font awesome css link  -->
+    <link rel="stylesheet" href="{% static 'font-awesome-4.7.0/css/font-awesome.min.css' %}">
+
+</head>
+<body>
+
+    {% include 'include/navbar.html' %}
+
+    <div class="container">
+
+        {% include 'include/message.html' %}
+        {% block content %}{% endblock %}
+
+    </div>
+
+    <!-- jquery -->
+    <script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
+
+    <!-- bootstrap js -->
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+    
+    <!-- script js -->
+    <script src="{% static 'js/main.js' %}"></script>
+</body>
+</html>
